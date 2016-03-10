@@ -53,7 +53,7 @@ public class EnemyBehaviour : MonoBehaviour
 		if(col.gameObject.tag.Equals("Arrow") && this.transform.position.x > -27f && this.transform.position.x < 27f)
 		{
 			Destroy(col.gameObject);
-			if(this.gameObject.GetComponent<EnemyTypeSet>().type.Equals(LojaBehaviour.arrow))
+			if(this.gameObject.GetComponent<EnemyTypeSet>().type.Equals(col.name))
 				life -= LojaBehaviour.damage;
 		}
 		if(col.gameObject.tag.Equals("Castle"))

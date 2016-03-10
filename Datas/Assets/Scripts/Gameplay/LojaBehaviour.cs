@@ -6,7 +6,6 @@ public class LojaBehaviour : MonoBehaviour {
 
     public static float money;
     public static float damage;
-    public static string arrow;
 
 	public Text moneyState;
     public Image[] scene;
@@ -59,10 +58,6 @@ public class LojaBehaviour : MonoBehaviour {
 	}
 	public void Scene (string scene) {
 		Application.LoadLevel (scene);
-	}
-	public void SetArrow(string type)
-	{
-		arrow = type;
 	}
 	
 	public void SumCoin(int value)

@@ -11,11 +11,12 @@ public class ShootBehaviour : MonoBehaviour {
 	{
 		arrow = GameObject.FindGameObjectWithTag("Arrow");
 	}
-	public void Shoot ()
+	public void Shoot (string name)
     {
         newArrow = (GameObject)Instantiate(arrow, arrow.transform.position, arrow.transform.rotation);
         newArrow.GetComponent<SpriteRenderer>().enabled = true;
         newArrow.GetComponent<ArrowDestroyController>().enabled = true;
+		newArrow.name = name;
         newArrow.rigidbody2D.velocity = newArrow.transform.right * 5 * 10;
 	}
 }
