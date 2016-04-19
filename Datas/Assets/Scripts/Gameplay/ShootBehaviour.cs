@@ -17,6 +17,6 @@ public class ShootBehaviour : MonoBehaviour {
         newArrow.GetComponent<SpriteRenderer>().enabled = true;
         newArrow.GetComponent<ArrowDestroyController>().enabled = true;
 		newArrow.name = name;
-        newArrow.rigidbody2D.velocity = newArrow.transform.right * 5 * 10;
+        newArrow.GetComponent<Rigidbody2D>().velocity = newArrow.transform.right * 5 * 10;
 	}
 }

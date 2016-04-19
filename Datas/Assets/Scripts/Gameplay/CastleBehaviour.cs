@@ -15,7 +15,7 @@ public class CastleBehaviour : MonoBehaviour {
 	public GameObject newrecord;
 
 
-	void Start () {
+    void Start () {
 		atualnumber = 0;
 		lose = false;
 	}
@@ -33,8 +33,8 @@ public class CastleBehaviour : MonoBehaviour {
 			opa = Time.fixedTime;
 			atualnumber ++;
 		}
-		score_t.text = "Your Score:\n" + atualnumber.ToString ();
-		record_t.text = "Your Best:\n" + record.ToString();
+		score_t.text = "Your Score:" + "\n" + atualnumber;
+        record_t.text = "Your Best:" + "\n" + record;
 	}
    
 	public void DamageMe(float damaged)
@@ -43,6 +43,7 @@ public class CastleBehaviour : MonoBehaviour {
 		canvas.GetComponent<Canvas>().sortingOrder = 5;
 		gameOver.SetActive(true);
 		lose = true;
+      
 		GetComponent<ScoreManaher> ().enabled = true;
 		if (PlayerPrefs.HasKey ("Record") && EnemyBehaviour.destroyerTotal > PlayerPrefs.GetFloat ("Record") || !PlayerPrefs.HasKey ("Record")) {
 			PlayerPrefs.SetFloat ("Record", EnemyBehaviour.destroyerTotal);

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class LojaBehaviour : MonoBehaviour {
 
@@ -15,16 +16,21 @@ public class LojaBehaviour : MonoBehaviour {
 	public Sprite[] tiro;
     public Sprite[] basic;
 	public Sprite[] hell;
+    public Text[] texts;
     public GameObject menu;
     public GameObject insertName;
 
     private string myUpgrades;
-    private string skin_backgound;
+    private string activedperso;
+    private string activedS;
+    public Sprite[] spites = new Sprite[2];
     private float value;
     private string upgrade;
 
+
     void Awake()
-	{	
+	{
+
         if (PlayerPrefs.HasKey("name"))
         {
             GameObject.Find("NameInsert").SetActive(false);
@@ -36,9 +42,50 @@ public class LojaBehaviour : MonoBehaviour {
 	void Start()
     {
         if (PlayerPrefs.HasKey("myUpgrades"))
-            myUpgrades = PlayerPrefs.GetString("myUpgrade");
+            myUpgrades = PlayerPrefs.GetString("myUpgrades");
+
+        string[] acquiredUp;
+        acquiredUp = PlayerPrefs.GetString("myUpgrades").Split('|');
+        foreach (string verify in acquiredUp)
+        {
+            if (verify.Equals("Hell"))
+            {
+                if (PlayerPrefs.GetString("activedS") == verify)
+                {
+                    for (int i = 0; i < scene.Length; i++)
+                    {
+                        scene[i].sprite = hell[i];
+                    }
+                    texts[4].text = verify + " Ative";
+                }
+                else texts[4].text = verify + " Acquired";
+            }
+            else if (verify.Equals("Hunter"))
+            {
+               
+                if (PlayerPrefs.GetString("activedperso") == verify)
+                {
+                     myPerson.sprite = person[1];
+                    texts[0].text = verify + " Ative";
+                }
+                else texts[0].text = verify + " Acquired";
+            }
+            else  if (verify.Equals("Hippie"))
+            {
+               
+
+                if (PlayerPrefs.GetString("activedperso") == verify)
+                {
+                    myPerson.sprite = person[3];
+                    texts[1].text = verify + " Ative";
+                }
+                else texts[1].text = verify + " Acquired";
+
+            }
+        }
+
         if (PlayerPrefs.HasKey("money"))
-            money = PlayerPrefs.GetFloat("money");
+           money = PlayerPrefs.GetFloat("money");
         EnemyBehaviour.destroyerTotal = 0;
         damage = 1f;
 		moneyState.text = money.ToString ();
@@ -57,10 +104,11 @@ public class LojaBehaviour : MonoBehaviour {
 		}
 	}
 	public void Scene (string scene) {
-		Application.LoadLevel (scene);
+        SceneManager.LoadScene(scene);
 	}
-	
-	public void SumCoin(int value)
+
+
+    public void SumCoin(int value)
 	{
 		money += value;
         if (money > 1000000)
@@ -83,7 +131,7 @@ public class LojaBehaviour : MonoBehaviour {
     {
         Text text = texts.GetComponent<Text>();
 		bool iHave = false;
-        if (myUpgrades != null & myUpgrades != "")
+        if (myUpgrades != null && myUpgrades != "")
         {
             string[] acquiredUp;
             acquiredUp = myUpgrades.Split('|');
@@ -97,10 +145,17 @@ public class LojaBehaviour : MonoBehaviour {
         }
         if (iHave)
         {
-            if (text.text.Equals(upgrade + " Ative"))
+            if (text.text.Equals(upgrade + " Ative") && upgrade != "Hell")
             {
                 text.text = upgrade + " Acquired";
+                DesactivePerson();
+                PlayerPrefs.SetString("activedperso", "");
+            }
+            else if(text.text.Equals(upgrade + " Ative") && upgrade == "Hell")
+            {
                 DesactiveScene();
+                text.text = upgrade + " Acquired";
+                PlayerPrefs.SetString("activedS", "");
             }
             else
             {
@@ -109,13 +164,10 @@ public class LojaBehaviour : MonoBehaviour {
         }
         else if (money >= value)
         {
-          
-            myUpgrades += "|" + upgrade;
-            print(myUpgrades);
-            PlayerPrefs.SetString("myUpgrades", myUpgrades);
-            print(PlayerPrefs.GetString("myUpgrades"));
+            myUpgrades +=  "|" + upgrade;   
             ActiveUpgrade(text);
             SumCoin(int.Parse((value *-1).ToString()));
+            PlayerPrefs.SetString("myUpgrades", myUpgrades);
         }
 	}
     void ActiveUpgrade(Text text)
@@ -126,21 +178,29 @@ public class LojaBehaviour : MonoBehaviour {
             for (int i = 0; i < scene.Length; i++)
             {
                 scene[i].sprite = hell[i];
+                activedS = upgrade;
+                PlayerPrefs.SetString("activedS", activedS);
             }
+          
         }
-        else if (upgrade.Equals("Hunter"))
+        if (upgrade.Equals("Hunter"))
         {
             myPerson.sprite = person[1];
+            activedperso = upgrade;
+            PlayerPrefs.SetString("activedperso", activedperso);
 
         }
-        else if (upgrade.Equals("Mage"))
+        if (upgrade.Equals("Mage"))
         {
             myPerson.sprite = person[2];
+            activedperso = upgrade;
+            PlayerPrefs.SetString("activedperso", activedperso);
         }
-        else if (upgrade.Equals("Hippie"))
+        if (upgrade.Equals("Hippie"))
         {
+            activedperso = upgrade;
             myPerson.sprite = person[3];
-			Arm.GetComponent<SpriteRenderer>().sprite = tiro[1];
+            PlayerPrefs.SetString("activedperso", activedperso);
 
         }
     }
